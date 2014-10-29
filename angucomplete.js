@@ -26,7 +26,9 @@ angular.module('angucomplete', [] )
                 "matchClass": "@matchclass",
                 "onChangeText": "=",
                 "onChangeData": "=",
-                "i18n": "="
+                "i18n": "=",
+                "authEmail": "=",
+                "authToken": "="
             },
             template: '<div class="angucomplete-holder"><input id="{{id}}_value" ng-model="searchStr" type="text" placeholder="{{placeholder}}" class="{{inputClass}}" onmouseup="this.select();" ng-focus="resetHideResults()" ng-blur="blurText()" /><div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-if="showDropdown"><div class="angucomplete-searching" ng-show="searching">{{ i18n[\'searching\'] }}</div><div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)">{{ i18n[\'no-results-found\'] }}</div><div class="angucomplete-row" ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseover="hoverRow()" ng-class="{\'angucomplete-selected-row\': $index == currentIndex}"><div ng-if="imageField" class="angucomplete-image-holder"><img ng-if="result.image && result.image != \'\'" ng-src="{{result.image}}" class="angucomplete-image"/><div ng-if="!result.image && result.image != \'\'" class="angucomplete-image-default"></div></div><div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div><div class="angucomplete-title" ng-if="!matchClass">{{ result.title }}</div><div ng-if="result.description && result.description != \'\'" class="angucomplete-description">{{result.description}}</div></div></div></div>',
 
@@ -133,7 +135,7 @@ angular.module('angucomplete', [] )
                             $scope.processResults(matches, str);
 
                         } else {
-                            $http.get($scope.url + str, {}).
+                            $http.get($scope.url + str + '&email='+$scope.authEmail+'&token='+$scope.authToken, {}).
                                 success(function(responseData, status, headers, config) {
                                     $scope.searching = false;
                                     $scope.processResults((($scope.dataField) ? responseData[$scope.dataField] : responseData ), str);
